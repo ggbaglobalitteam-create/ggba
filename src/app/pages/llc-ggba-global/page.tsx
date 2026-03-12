@@ -651,8 +651,8 @@ export default function LlcGgbaGlobal() {
 
             {/* ── FEATURED PARTNERS ── */}
             <FeaturedPartners
-                label="Featured Partners"
-                title="Trusted by Belarus's Finest Universities"
+                label=""
+                title="Featured Institutions in Belarus "
                 subtitle="Proudly partnering with leading institutions to open doors for students and professionals worldwide."
                 partners={featuredInstitutions}
             />

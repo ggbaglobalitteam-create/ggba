@@ -10,7 +10,7 @@ const quickLinks = [
     { label: "Home", href: "/" },
     { label: "About Us", href: "/pages/about-ggba-global" },
     { label: "Contact Us", href: "/pages/contact" },
-    { label: "Track Application", href: "#" },
+    // { label: "Track Application", href: "#" },
 ];
 
 const entities = [

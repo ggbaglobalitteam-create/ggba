@@ -9,8 +9,8 @@ const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 export default function GlobalNetwork() {
     const networks = [
         {
-            title: "Visa Application Centre",
-            description: "Visa applications, appointments, and comprehensive support for international travel.",
+            title: "International Application Centre",
+            description: " applications, and comprehensive support for international travel.",
             // image: "/images/network-visa.png",
             href: "/pages/international-application-centre",
             tag: "Travel & Immigration",
