@@ -1,0 +1,462 @@
+"use client";
+
+import { useState } from "react";
+import { Globe, Clock, ShieldCheck, ArrowRight, Calendar, Activity, MapPin, CheckCircle2, Plus, Minus } from "lucide-react";
+
+const additionalItems = [
+    { icon: Calendar, title: "Book an appointment", desc: "Schedule your appointment with us", action: "Book now", href: "/pages/contact", isLink: true },
+    { icon: Activity, title: "Track your application", desc: "Stay informed of your application status", action: "Track now", href: "#", isLink: false },
+    { icon: MapPin, title: "Find a centre", desc: "Information about your local centre", action: "Find now", href: "/pages/contact", isLink: true },
+];
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+
+/* ── DATA ── */
+const documents = [
+    "Valid passport (with at least 6 months validity)",
+    "Completed visa application form",
+    "Recent passport-sized photographs",
+    "Proof of travel arrangements (flight bookings, itinerary)",
+    "Proof of accommodation",
+    "Financial documents (bank statements, sponsorship letters)",
+    "Travel insurance",
+    "Additional documents specific to visa type",
+];
+
+const infoSteps = [
+    {
+        num: 1,
+        title: "Identify visa type",
+        body: "The first step is to determine which visa type you need, and check whether you’re eligible to apply for it. You’ll also need to know the documents that you’ll have to submit along with your application, how long the application might take and fees you’ll have to pay. Each application must comply with the guidelines applicable for your visa category. If your documents are not in English, you may need to get translations prepared before applying.",
+    },
+    {
+        num: 2,
+        title: "Begin your application",
+        body: "Once you are ready to apply, you can download the visa application form , complete it, print the complete form and bring it with you to the Visa Application Centre (together with the documents required for the Visa category chosen) for submission.",
+    },
+    {
+        num: 3,
+        title: "Book an appointment",
+        body: "Once you have filled your visa form, you need to book an appointment to submit your application at the Visa Application Centre. Once you’ve booked your appointment, you’ll receive an appointment confirmation email along with the letter of appointment. If you are part of a family or group, you’ll have to book individual appointments for each member of the family or group.",
+    },
+    {
+        num: 4,
+        title: "Pay your fees",
+        body: "Once you have made your application, you will need to pay your visa application fee. If you download the form to print and bring to the Visa Application Centre, payment will be made at the time of your appointment . You can pay the visa fee at the visa application centre using Credit/Debit Card, Cash, and UPI.",
+    },
+    {
+        num: 5,
+        title: "Visit a Visa Application Centre",
+        body: "You’ll have to submit your complete visa application form at the Visa Application Centre Find out What happens at the Visa Application Centre.",
+    },
+    {
+        num: 6,
+        title: "Track your application",
+        body: "You will receive an email update when your decision has been returned to the Visa Application Centre. You can also track your visa application status online. Use the Reference Number present on the invoice/receipt issued by the Visa Application Centre along with your date of birth to access this service.",
+    },
+    {
+        num: 7,
+        title: "Collect your passport",
+        body: "After a visa application decision has been made, you can pick up your passport from the Visa Application Centre or have your passport returned to you by courier for an additional fee. Collecting your passport in person: bring the receipt issued by the Visa Application Centre and a form of Government identification. If permitted you may be able to send a representative to collect your passport; they will need to present a letter of authorization signed by you, bring the receipt issued to you by the Visa Application Centre and their Government identification. Please check the Visa Application Centre opening time for the options available to collect your documents .",
+    },
+];
+
+const whyUs = [
+    { icon: Globe, title: "Expert Guidance", desc: "Our experienced team provides personalized support throughout your application process." },
+    { icon: Clock, title: "Fast Processing", desc: "Streamlined procedures ensure your applications are processed quickly and efficiently." },
+    { icon: ShieldCheck, title: "Comprehensive Support", desc: "From initial consultation to final approval, we're with you every step of the way." },
+];
+
+/* ── ACCORDION ITEM ── */
+function AccordionItem({ step, index }: { step: typeof infoSteps[0]; index: number }) {
+    const [open, setOpen] = useState(false);
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05, duration: 0.35 }}
+            className="border-b border-slate-200 last:border-b-0"
+        >
+            <button
+                onClick={() => setOpen(!open)}
+                className="flex w-full items-center gap-5 py-5 text-left group"
+            >
+                <span className="w-7 text-lg font-light text-slate-400 shrink-0">{step.num}</span>
+                <span className={`flex-1 text-base font-medium transition-colors ${open ? "text-amber-600" : "text-slate-700 group-hover:text-slate-900"}`}>
+                    {step.title}
+                </span>
+                <span className={`shrink-0 transition-colors ${open ? "text-amber-500" : "text-slate-400"}`}>
+                    {open ? <Minus size={16} /> : <Plus size={16} />}
+                </span>
+            </button>
+            <AnimatePresence initial={false}>
+                {open && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                    >
+                        <p className="pb-5 pl-12 pr-6 text-sm leading-relaxed text-slate-500">
+                            {step.body}
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+}
+
+/* ── TAB PANELS ── */
+function TabApply() {
+    return (
+        <motion.div
+            key="apply"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
+        >
+            {/* Overview card */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-slate-900 mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                    Visa Application Overview
+                </h2>
+                <div className="space-y-3 text-slate-600 text-sm leading-relaxed">
+                    <p>Our streamlined visa application process makes it easy to apply for visas to multiple destinations worldwide.</p>
+                    <p>The International Application Centre specializes in processing visa applications for various countries and visa types. Whether you're traveling for tourism, business, education, or work, our expert team will guide you through every step of the application process.</p>
+                    <p>We handle all types of visas including tourist visas, business visas, student visas, work permits, and more. Our comprehensive service ensures that your application is complete, accurate, and submitted on time.</p>
+                </div>
+            </div>
+
+            {/* Required Documents card */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-slate-900 mb-2" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                    Required Documents
+                </h2>
+                <p className="text-sm text-slate-500 mb-6">Prepare these documents before starting your application</p>
+                <ul className="space-y-3">
+                    {documents.map((doc, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                            <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-amber-500" />
+                            <span className="text-sm text-slate-600">{doc}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            {/* Application Process card */}
+            {/* <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-slate-900 mb-2" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                    Application Process
+                </h2>
+                <p className="text-sm text-slate-500 mb-8">Follow these steps to complete your visa application</p>
+                <div className="space-y-4">
+                    {[
+                        { title: "Initial Consultation", desc: "Contact us to discuss your travel plans and visa requirements. Our team will assess your needs and provide guidance." },
+                        { title: "Document Preparation", desc: "Gather all required documents according to our checklist. We can help you prepare and verify your documents." },
+                        { title: "Application Submission", desc: "Submit your completed application and documents. We will review everything for accuracy and completeness." },
+                        { title: "Processing & Follow-up", desc: "We submit your application to the relevant authorities and keep you updated on the progress." },
+                        { title: "Visa Collection", desc: "Once approved, we will notify you and arrange for visa collection or delivery." },
+                    ].map((step, i) => (
+                        <div key={i} className="group flex gap-5 rounded-xl border border-slate-100 bg-slate-50 px-6 py-5 transition-all hover:border-amber-200 hover:bg-amber-50">
+                            <div className="flex-shrink-0 h-9 w-9 rounded-lg border border-amber-200 bg-amber-50 text-amber-500 text-xs font-bold font-mono flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                                {String(i + 1).padStart(2, "0")}
+                            </div>
+                            <div>
+                                <h3 className="text-sm font-bold text-slate-900 mb-1 group-hover:text-amber-600 transition-colors">{step.title}</h3>
+                                <p className="text-sm text-slate-500 leading-relaxed">{step.desc}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div> */}
+
+            {/* Next Steps */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-slate-900 mb-3" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                    Next Steps
+                </h2>
+                <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+                    Ready to start your visa application? Contact our team today to schedule a consultation. We're here to answer your questions and guide you through the entire process.
+                </p>
+                <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+                    For urgent applications or specific inquiries, please reach out to us directly through our contact page or call our office during business hours.
+                </p>
+                <Link
+                    href="/pages/contact"
+                    className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-amber-500"
+                >
+                    Contact Us
+                    <ArrowRight size={14} />
+                </Link>
+            </div>
+        </motion.div>
+    );
+}
+
+function TabAppointment() {
+    return (
+        <motion.div
+            key="appointment"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.3 }}
+        >
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-slate-900 mb-6" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                    Book an Appointment
+                </h2>
+                <Link
+                    href="/pages/contact"
+                    className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-amber-500"
+                >
+                    Click here to book your appointment
+                    <ArrowRight size={14} />
+                </Link>
+            </div>
+        </motion.div>
+    );
+}
+
+function TabInfo() {
+    return (
+        <motion.div
+            key="info"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.3 }}
+        >
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm divide-y divide-slate-200 px-8">
+                {infoSteps.map((step, i) => (
+                    <AccordionItem key={i} step={step} index={i} />
+                ))}
+            </div>
+        </motion.div>
+    );
+}
+
+function TabContact() {
+    return (
+        <motion.div
+            key="contact"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.3 }}
+        >
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-slate-900 mb-3" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                    Contact Us
+                </h2>
+                <p className="text-sm text-slate-600 mb-6 leading-relaxed max-w-2xl">
+                    Have questions about visa applications or need assistance? Our International Application Centre team is here to help. Reach out to us through any of the contact methods.
+                </p>
+                <Link
+                    href="/pages/contact"
+                    className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-amber-500"
+                >
+                    Contact Us
+                    <ArrowRight size={14} />
+                </Link>
+            </div>
+        </motion.div>
+    );
+}
+
+/* ── PAGE ── */
+export default function InternationalApplicationCentre() {
+    const [activeTab, setActiveTab] = useState("apply");
+
+    const tabs = [
+        { id: "apply", label: "Apply for Visa" },
+        { id: "appointment", label: "Book an appointment" },
+        { id: "info", label: "Need More Information" },
+        { id: "contact", label: "Contact us" },
+    ];
+
+    return (
+        <div
+            className="flex flex-col w-full bg-white pt-24 min-h-screen text-slate-900"
+            style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif" }}
+        >
+
+            {/* ── HERO ── */}
+            <section className="relative w-full h-[480px] flex items-end justify-start overflow-hidden">
+                <div
+                    className="absolute inset-0 z-0 bg-cover bg-center"
+                    style={{ backgroundImage: "url('/images/visa-hero.avif')" }}
+                />
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-white via-white/55 to-transparent" />
+                <div className="absolute inset-0 z-10 bg-gradient-to-r from-white/65 to-transparent" />
+                <div className="pointer-events-none absolute right-[8%] top-[10%] z-10 h-72 w-72 rounded-full border border-amber-400/20" />
+                <div className="pointer-events-none absolute right-[8%] top-[10%] z-10 h-48 w-48 translate-x-12 translate-y-12 rounded-full border border-amber-400/15" />
+
+                <div className="relative z-20 container mx-auto px-6 max-w-[1200px] pb-14">
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-50 px-4 py-1.5"
+                    >
+                        <Globe size={12} className="text-amber-600" />
+                        {/* <span className="text-xs font-semibold uppercase tracking-widest text-amber-600">International Services</span> */}
+                    </motion.div>
+                    <motion.h1
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.65, delay: 0.08 }}
+                        className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight tracking-tight mb-5"
+                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                    >
+                        Visa Application<br />
+                        <span className="text-amber-500">Centre</span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.55, delay: 0.18 }}
+                        className="text-slate-500 max-w-lg mb-8 text-base leading-relaxed"
+                    >
+                        The International Application Centre provides comprehensive support for visa applications and appointments.
+                    </motion.p>
+                    <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.24 }}
+                        className="text-2xl md:text-3xl font-bold text-slate-900  leading-tight tracking-tight mb-2" 
+                    >
+                       Why Us ?
+                    </motion.h2>
+
+                    <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
+                        className="text-slate-400 max-w-lg text-sm leading-relaxed mb-5"
+                    >
+                        We make international applications simple, efficient, and stress-free.
+                    </motion.p>
+                </div>
+            </section>
+
+            {/* ── WHY US STRIP ── */}
+            <section className="bg-white py-16 border-b border-slate-100">
+                <div className="container mx-auto px-6 max-w-[1200px]">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {whyUs.map((item, index) => {
+                            const Icon = item.icon;
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1, duration: 0.45 }}
+                                    className="group flex gap-4 rounded-2xl border border-slate-100 bg-slate-50 p-6 transition-all hover:border-amber-200 hover:bg-amber-50"
+                                >
+                                    <div className="flex-shrink-0 h-11 w-11 flex items-center justify-center rounded-xl border border-amber-200 bg-amber-50 text-amber-500 group-hover:bg-amber-100 transition-colors">
+                                        <Icon size={20} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-base font-bold text-slate-900 mb-1">{item.title}</h3>
+                                        <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── STICKY TABS ── */}
+            <div className="sticky top-[72px] z-40 bg-white border-b border-slate-200 shadow-sm">
+                <div className="container mx-auto px-6 max-w-[1200px]">
+                    <div className="flex items-center overflow-x-auto">
+                        {tabs.map((tab) => {
+                            const isActive = activeTab === tab.id;
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`relative whitespace-nowrap px-5 py-4 text-sm font-medium transition-colors ${isActive ? "text-slate-900" : "text-slate-500 hover:text-slate-800"
+                                        }`}
+                                >
+                                    {tab.label}
+                                    {isActive && (
+                                        <motion.span
+                                            layoutId="tab-indicator"
+                                            className="absolute inset-x-0 bottom-0 h-0.5 bg-slate-900 rounded-full"
+                                        />
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            {/* ── TAB CONTENT ── */}
+            <section className="py-10 bg-slate-50 flex-1">
+                <div className="container mx-auto px-6 max-w-[1200px]">
+                    <AnimatePresence mode="wait">
+                        {activeTab === "apply" && <TabApply key="apply" />}
+                        {activeTab === "appointment" && <TabAppointment key="appointment" />}
+                        {activeTab === "info" && <TabInfo key="info" />}
+                        {activeTab === "contact" && <TabContact key="contact" />}
+                    </AnimatePresence>
+                </div>
+            </section>
+
+            {/* ── ADDITIONAL INFORMATION ── */}
+            <section className="py-20 bg-white border-t border-slate-100">
+                <div className="container mx-auto px-6 max-w-[1200px]">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="text-3xl font-medium text-slate-900 text-center mb-10"
+                        style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                    >
+                        Additional Information
+                    </motion.h2>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {additionalItems.map((item, index) => {
+                            const Icon = item.icon;
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1, duration: 0.45 }}
+                                    className="group flex flex-col rounded-2xl border border-slate-200 bg-slate-50 p-8 transition-all duration-300 hover:-translate-y-1 hover:border-amber-200 hover:bg-white hover:shadow-[0_12px_32px_rgba(245,158,11,0.1)]"
+                                >
+                                    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-amber-200 bg-amber-50 text-amber-500 group-hover:bg-amber-100 transition-colors">
+                                        <Icon size={20} />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-900 mb-1">{item.title}</h3>
+                                    <p className="text-sm text-slate-500 mb-8 flex-grow leading-relaxed">{item.desc}</p>
+                                    {item.isLink ? (
+                                        <Link
+                                            href={item.href}
+                                            className="group/btn flex items-center justify-center gap-2 w-full rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white transition-all hover:bg-amber-500 mt-auto"
+                                        >
+                                            {item.action}
+                                            <ArrowRight size={13} className="transition-transform group-hover/btn:translate-x-0.5" />
+                                        </Link>
+                                    ) : (
+                                        <button className="flex items-center justify-center gap-2 w-full rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white transition-all hover:bg-amber-500 mt-auto cursor-pointer">
+                                            {item.action}
+                                            <ArrowRight size={13} />
+                                        </button>
+                                    )}
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+}

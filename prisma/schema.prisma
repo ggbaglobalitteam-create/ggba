@@ -1,0 +1,284 @@
+// GGBA Global - Prisma Schema
+// PostgreSQL database for visa application platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============ NextAuth.js Models ============
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============ Core Models ============
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?   // hashed, for credentials provider
+  firstName     String
+  lastName      String
+  phone         String?
+  role          UserRole  @default(APPLICANT)
+  suspended     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  applicantApplications Application[]
+  agent                  Agent?
+  statusHistoryChanges   StatusHistory[] @relation("ChangedByUser")
+  sentMessages          Message[]       @relation("MessageSender")
+  notifications         Notification[]
+}
+
+enum UserRole {
+  APPLICANT
+  AGENT
+  ADMIN
+}
+
+model Agent {
+  id                    String     @id @default(cuid())
+  userId                String     @unique
+  status                AgentStatus @default(PENDING)
+  companyName           String?
+  address               String?    @db.Text
+  businessRegistrationNo String?
+  taxId                 String?
+  directorId            String?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications Application[]
+  documents    AgentDocument[]
+}
+
+enum AgentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum AgentDocumentType {
+  BUSINESS_REGISTRATION
+  TAX_PAN
+  IDENTITY_DOCUMENT
+}
+
+model Application {
+  id                  String            @id @default(cuid())
+  visaConfigKey       String            // e.g. "georgia-student-visa"
+  destinationCountry String
+  purpose             String
+  formData            Json              @default("{}") // dynamic step form answers
+  status              ApplicationStatus @default(PENDING)
+  applicantId         String
+  agentId             String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  applicant     User             @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  agent         Agent?           @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  documents     Document[]
+  payments      Payment[]
+  messages      Message[]
+  statusHistory StatusHistory[]
+  appointments  Appointment[]
+}
+
+enum ApplicationStatus {
+  PENDING
+  UNDER_REVIEW
+  REQUIRES_INFO
+  APPROVED
+  REJECTED
+}
+
+model Document {
+  id              String         @id @default(cuid())
+  documentId      String         // matches config's DocumentItem.id
+  name            String
+  status          DocumentStatus @default(PENDING)
+  fileUrl         String?        @db.Text
+  verificationNote String?      @db.Text
+  applicationId   String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([applicationId, documentId])
+}
+
+enum DocumentStatus {
+  PENDING
+  UPLOADED
+  VERIFIED
+  REJECTED
+}
+
+model StatusHistory {
+  id              String            @id @default(cuid())
+  status          ApplicationStatus
+  note            String?          @db.Text
+  changedByUserId String
+  notifiedApplicant Boolean        @default(false)
+  applicationId  String
+  createdAt       DateTime         @default(now())
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  changedBy   User        @relation("ChangedByUser", fields: [changedByUserId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  amount          Decimal       @db.Decimal(12, 2)
+  currency        String        @default("EUR")
+  method          String
+  status          PaymentStatus @default(PENDING)
+  transactionId  String?
+  applicationId   String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Message {
+  id            String   @id @default(cuid())
+  content       String   @db.Text
+  senderUserId  String
+  applicationId String
+  isRead        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  sender       User        @relation("MessageSender", fields: [senderUserId], references: [id], onDelete: Cascade)
+}
+
+model Appointment {
+  id                String   @id @default(cuid())
+  applicationId     String
+  visaConfigKey     String
+  slotId            String
+  slotDate          String
+  slotTime          String
+  slotTitle         String?
+  applicantName     String
+  applicantEmail    String
+  applicantPhone    String?
+  passportNumber    String?
+  nationality       String?
+  confirmationEmail String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId, createdAt])
+  @@unique([applicationId, slotId])
+  @@unique([visaConfigKey, slotDate, slotTime])
+}
+
+model AgentDocument {
+  id        String            @id @default(cuid())
+  agentId   String
+  type      AgentDocumentType
+  label     String
+  fileName  String
+  fileUrl   String            @db.Text
+  status    DocumentStatus    @default(UPLOADED)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@unique([agentId, type])
+  @@index([agentId, createdAt])
+}
+
+model VisaConfigOverride {
+  id        String   @id @default(cuid())
+  configKey String   @unique
+  country   String?
+  purpose   String?
+  config    Json     // full VisaConfig object
+  status    VisaConfigStatus @default(DRAFT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum VisaConfigStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Notification {
+  id            String           @id @default(cuid())
+  userId        String
+  type          NotificationType
+  title         String
+  body          String?          @db.Text
+  applicationId String?
+  isRead        Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  readAt        DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead, createdAt])
+  @@index([applicationId, createdAt])
+}
+
+enum NotificationType {
+  APPLICATION_SUBMITTED
+  APPLICATION_STATUS_CHANGED
+  NEW_MESSAGE
+  SYSTEM
+}
