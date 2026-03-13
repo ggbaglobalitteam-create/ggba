@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Calendar, Activity, MapPin } from "lucide-react";
 
+import { APPLICATION_STATUS_ROUTE, APPOINTMENT_BOOKING_ROUTE } from "@/lib/portalRoutes";
+
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 
 export default function AdditionalInfo() {
@@ -11,18 +13,18 @@ export default function AdditionalInfo() {
         {
             icon: Calendar,
             title: "Book an appointment",
-            desc: "Schedule your appointment with us",
+            desc: "Schedule your application submission appointment",
             action: "Book now",
-            href: "/pages/contact",
+            href: APPOINTMENT_BOOKING_ROUTE,
             isLink: true,
         },
         {
             icon: Activity,
             title: "Track your application",
-            desc: "Stay informed of your application status",
+            desc: "Check your application status inside the portal",
             action: "Track now",
-            href: "#",
-            isLink: false,
+            href: APPLICATION_STATUS_ROUTE,
+            isLink: true,
         },
         {
             icon: MapPin,

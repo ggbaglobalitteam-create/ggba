@@ -1,28 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Globe, Clock, ShieldCheck, ArrowRight, Calendar, Activity, MapPin, CheckCircle2 } from "lucide-react";
+import { Globe, Clock, ShieldCheck, ArrowRight } from "lucide-react";
 import ActionCards from "@/components/sections/ActionCards";
-
-const additionalItems = [
-    { icon: Calendar, title: "Book an appointment", desc: "Schedule your appointment with us", action: "Book now", href: "/pages/contact", isLink: true },
-    { icon: Activity, title: "Track your application", desc: "Stay informed of your application status", action: "Track now", href: "#", isLink: false },
-    { icon: MapPin, title: "Find a centre", desc: "Information about your local centre", action: "Find now", href: "/pages/contact", isLink: true },
-];
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-/* ── DATA ── */
-const documents = [
-    "Valid passport (with at least 6 months validity)",
-    "Completed visa application form",
-    "Recent passport-sized photographs",
-    "Proof of travel arrangements (flight bookings, itinerary)",
-    "Proof of accommodation",
-    "Financial documents (bank statements, sponsorship letters)",
-    "Travel insurance",
-    "Additional documents specific to visa type",
-];
+import { APPOINTMENT_BOOKING_ROUTE } from "@/lib/portalRoutes";
 
 const infoSteps = [
     {
@@ -150,59 +133,6 @@ export default function InternationalApplicationCentre() {
                 </div>
             </section>
 
-            {/* ── VISA APPLICATION OVERVIEW ── */}
-            <section className="py-16 bg-white border-b border-slate-100">
-                <div className="container mx-auto px-6 max-w-[1200px]">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm mb-6">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
-                            Visa Application Overview
-                        </h2>
-                        <div className="space-y-3 text-slate-600 text-sm leading-relaxed">
-                            <p>Our streamlined visa application process makes it easy to apply for visas to multiple destinations worldwide.</p>
-                            <p>The International Application Centre specializes in processing visa applications for various countries and visa types. Whether you're traveling for tourism, business, education, or work, our expert team will guide you through every step of the application process.</p>
-                            <p>We handle all types of visas including tourist visas, business visas, student visas, work permits, and more. Our comprehensive service ensures that your application is complete, accurate, and submitted on time.</p>
-                        </div>
-                    </div>
-
-                    {/* Required Documents */}
-                    <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm mb-6">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-2" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
-                            Required Documents
-                        </h2>
-                        <p className="text-sm text-slate-500 mb-6">Prepare these documents before starting your application</p>
-                        <ul className="space-y-3">
-                            {documents.map((doc, i) => (
-                                <li key={i} className="flex items-start gap-3">
-                                    <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-amber-500" />
-                                    <span className="text-sm text-slate-600">{doc}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Next Steps */}
-                    <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-3" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
-                            Next Steps
-                        </h2>
-                        <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                            Ready to start your visa application? Contact our team today to schedule a consultation. We're here to answer your questions and guide you through the entire process.
-                        </p>
-                        <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                            For urgent applications or specific inquiries, please reach out to us directly through our contact page or call our office during business hours.
-                        </p>
-                        <Link
-                            href="/pages/contact"
-                            className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-amber-500"
-                        >
-                            Contact Us
-                            <ArrowRight size={14} />
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            
             {/* ── BOOK APPOINTMENT ── */}
             <section className="py-16 bg-white border-b border-slate-100">
                 <div className="container mx-auto px-6 max-w-[1200px]">
@@ -211,7 +141,7 @@ export default function InternationalApplicationCentre() {
                             Book an Appointment
                         </h2>
                         <Link
-                            href="/pages/contact"
+                            href={APPOINTMENT_BOOKING_ROUTE}
                             className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-amber-500"
                         >
                             Click here to book your appointment
@@ -232,7 +162,7 @@ export default function InternationalApplicationCentre() {
                         className="text-3xl font-bold text-slate-900 mb-10"
                         style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
                     >
-                        How to Apply
+                        Steps to Follow
                     </motion.h2>
 
                     <div className="rounded-2xl border border-slate-200 bg-white shadow-sm px-8 divide-y divide-slate-100">

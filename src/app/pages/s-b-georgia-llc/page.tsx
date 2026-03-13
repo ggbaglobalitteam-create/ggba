@@ -1,31 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, ArrowRight, GraduationCap, Stethoscope, TrendingUp, MapPin, Calendar, Activity } from "lucide-react";
+import { CheckCircle2, ArrowRight, GraduationCap, Stethoscope, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import FeaturedPartners from "@/components/sections/FeaturedPartners";
 import ActionCards from "@/components/sections/ActionCards";
-
-
-const additionalItems = [
-    { icon: Calendar, title: "Book an appointment", desc: "Schedule your appointment with us", action: "Book now", href: "/pages/contact", isLink: true },
-    { icon: Activity, title: "Track your application", desc: "Stay informed of your application status", action: "Track now", href: "#", isLink: false },
-    { icon: MapPin, title: "Find a centre", desc: "Information about your local centre", action: "Find now", href: "/pages/contact", isLink: true },
-];
-
-const georgiaInstitutions = [
-    { name: "University of Georgia", abbr: "UG", field: "Comprehensive Private University" },
-    { name: "Caucasus University", abbr: "CU", field: "International Partnerships & Business" },
-    { name: "Free University of Tbilisi", abbr: "FUT", field: "Law, Business & Economics" },
-    { name: "International Black Sea University", abbr: "IBSU", field: "International Programs" },
-    { name: "Georgian National University", abbr: "SEU", field: "Modern Campus & Wide Programs" },
-    { name: "Georgian American University", abbr: "GAU", field: "American-Standard Curriculum" },
-    { name: "New Vision University", abbr: "NVU", field: "Medicine & Research" },
-    { name: "European University", abbr: "EU", field: "International Medicine & Healthcare" },
-    { name: "Alte University", abbr: "ALTE", field: "International School of Medicine" },
-    { name: "Caucasus International University", abbr: "CIU", field: "IT, Business & International Programs" },
-];
 
 /* ─────────────────────────────────────────
    SHARED HELPERS
@@ -541,14 +520,6 @@ export default function SbGeorgiaLlc() {
                     </AnimatePresence>
                 </div>
             </section>
-
-            {/* ── FEATURED INSTITUTIONS ── */}
-            <FeaturedPartners
-                label="Partner Institutions"
-                title="Featured Institutions in Georgia"
-                subtitle="We work with Georgia's most respected universities to connect students with world-class academic opportunities."
-                partners={georgiaInstitutions}
-            />
 
             {/* ── ADDITIONAL INFORMATION ── */}
             {/* <section className="py-20 bg-white border-t border-slate-100">

@@ -1,17 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, ArrowRight, Building2, GraduationCap, TrendingUp, Briefcase, Users, Calendar, Activity, MapPin } from "lucide-react";
+import { CheckCircle2, ArrowRight, Building2, GraduationCap, TrendingUp, Briefcase, Users } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import FeaturedPartners from "@/components/sections/FeaturedPartners";
 import ActionCards from "@/components/sections/ActionCards";
-
-const additionalItems = [
-    { icon: Calendar, title: "Book an appointment", desc: "Schedule your appointment with us", action: "Book now", href: "/pages/contact", isLink: true },
-    { icon: Activity, title: "Track your application", desc: "Stay informed of your application status", action: "Track now", href: "#", isLink: false },
-    { icon: MapPin, title: "Find a centre", desc: "Information about your local centre", action: "Find now", href: "/pages/contact", isLink: true },
-];
 
 /* ─────────────────────────────────────────
    SHARED HELPERS
@@ -538,21 +531,6 @@ const tabs = [
     { id: "employers", label: "For Employers", icon: Users },
 ];
 
-const featuredInstitutions = [
-    { name: "Belarusian State University", abbr: "BSU", field: "Comprehensive Research University" },
-    { name: "Belarusian State Medical University", abbr: "BSMU", field: "Medicine & Healthcare" },
-    { name: "Belarusian Russian University", abbr: "BRU", field: "Engineering & Technology" },
-    { name: "Belarusian State University of Culture and Arts", abbr: "BSUCA", field: "Culture, Arts & Humanities" },
-    { name: "Belarus State University of Physical Education", abbr: "BSUPE", field: "Sports Science & Physical Education" },
-    { name: "Minsk Innovation University", abbr: "MIU", field: "Innovation & Business" },
-    { name: "Belarusian National Technical University", abbr: "BNTU", field: "Engineering & Technical Sciences" },
-    { name: "Belarusian State Pedagogical University", abbr: "BSPU", field: "Education & Pedagogy" },
-    { name: "Belarusian State Economic University", abbr: "BSEU", field: "Economics & Business" },
-    { name: "Baranavicki State University", abbr: "BarSU", field: "Liberal Arts & Sciences" },
-    { name: "Minsk State Linguistic University", abbr: "MSLU", field: "Languages & Linguistics" },
-    { name: "Belarusian State Technological University", abbr: "BSTU", field: "Technology & Natural Sciences" },
-];
-
 export default function LlcGgbaGlobal() {
     const [activeTab, setActiveTab] = useState("students");
 
@@ -648,14 +626,6 @@ export default function LlcGgbaGlobal() {
 
             {/* ── FEATURED INSTITUTIONS GRID ── */}
        
-
-            {/* ── FEATURED PARTNERS ── */}
-            <FeaturedPartners
-                label=""
-                title="Featured Institutions in Belarus "
-                subtitle="Proudly partnering with leading institutions to open doors for students and professionals worldwide."
-                partners={featuredInstitutions}
-            />
 
             {/* ── ADDITIONAL INFORMATION ── */}
             {/* <section className="py-20 bg-white border-t border-slate-100">

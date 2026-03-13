@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Calendar, Search, LogIn } from "lucide-react";
 
+import { APPLICATION_STATUS_ROUTE, APPOINTMENT_BOOKING_ROUTE, PORTAL_LOGIN_ROUTE } from "@/lib/portalRoutes";
+
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 
 export default function AdditionalInfo() {
@@ -13,23 +15,23 @@ export default function AdditionalInfo() {
             title: "LOGIN",
             desc: "Access your application portal and account services",
             action: "Login",
-            href: "/portal/login",
+            href: PORTAL_LOGIN_ROUTE,
             isLink: true,
         },
         {
             icon: Search,
             title: "Track your application",
-            desc: "Check application status using passport number only",
+            desc: "Check your application status inside the portal",
             action: "Track now",
-            href: "/track-application",
+            href: APPLICATION_STATUS_ROUTE,
             isLink: true,
         },
         {
             icon: Calendar,
             title: "Book an appointment",
-            desc: "Schedule your appointment with us",
+            desc: "Schedule your application submission appointment",
             action: "Book now",
-            href: "/pages/contact",
+            href: APPOINTMENT_BOOKING_ROUTE,
             isLink: true,
         },
     ];

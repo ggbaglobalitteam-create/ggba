@@ -23,7 +23,7 @@ export function buildAgentCertificateData(params: {
 
   return {
     agentId: agentRef,
-    companyName: params.companyName?.trim() || "Approved Agent",
+    companyName: params.companyName?.trim() || "G & G Biz Alliance Private Limited",
     representativeName: `${params.firstName || ""} ${params.lastName || ""}`.trim() || "Authorized Representative",
     registrationNumber: params.businessRegistrationNo?.trim() || "N/A",
     issuedAt: createdAt.toLocaleDateString("en-US", {
