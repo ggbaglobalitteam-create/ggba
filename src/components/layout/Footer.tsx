@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Linkedin, Facebook, Instagram, Globe, ArrowUpRight } from "lucide-react";
+import { Linkedin, Facebook, Instagram, ArrowUpRight } from "lucide-react";
+
+import { APPLICATION_STATUS_ROUTE, APPOINTMENT_BOOKING_ROUTE, PORTAL_LOGIN_ROUTE } from "@/lib/portalRoutes";
 
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 
 const quickLinks = [
-    { label: "Home", href: "/" },
-    { label: "About Us", href: "/pages/about-ggba-global" },
-    { label: "Contact Us", href: "/pages/contact" },
-    // { label: "Track Application", href: "#" },
+    { label: "Login", href: PORTAL_LOGIN_ROUTE },
+    { label: "Track your application", href: APPLICATION_STATUS_ROUTE },
+    { label: "Book an appointment", href: APPOINTMENT_BOOKING_ROUTE },
 ];
 
 const entities = [
@@ -63,7 +64,7 @@ export default function Footer() {
                         {/* Logo lockup */}
                         <div className="flex items-center gap-3 mb-5">
                             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500 text-slate-900">
-                               <img src='/images/logo.png'/>
+                               <img src='/images/logo.png' alt="GGBA Global logo" />
                             </div>
                             <span className="text-lg font-bold tracking-tight" style={serif}>GGBA Global</span>
                         </div>

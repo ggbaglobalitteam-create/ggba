@@ -148,7 +148,7 @@ export function createAgentCertificatePdf(params: {
 
     drawCenteredText(`Represented by ${params.representativeName}, has been officially approved and`, 297, 428, "F1", 15, body),
     drawCenteredText("registered as an", 297, 400, "F1", 15, body),
-    drawCenteredText("Authorized GGBA Global Educational Agent", 297, 356, "F2", 18, gold),
+    drawCenteredText("G & G Biz Alliance Private Limited", 297, 356, "F2", 18, gold),
 
     infoCard(70, 238, 160, 74, "Registration No.", params.registrationNumber),
     infoCard(242, 238, 120, 74, "Agent ID", params.agentId),

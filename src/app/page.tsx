@@ -2,7 +2,6 @@ import Hero from "@/components/sections/Hero";
 import GlobalNetwork from "@/components/sections/GlobalNetwork";
 import ActionCards from "@/components/sections/ActionCards";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
-import InstitutionsBanner from "../components/sections/Institutionsbanner";
 
 export default function Home() {
   return (
@@ -17,10 +16,6 @@ export default function Home() {
       <div className="-mt-4">
         <WhyChooseUs />
       </div>
-        <div className="mt-4 mb-8">
-<InstitutionsBanner />
-        </div>
-      
     </div>
   );
 }

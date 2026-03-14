@@ -39,12 +39,12 @@ export function AgentCertificateDocument({ data, qrTargetUrl }: AgentCertificate
             <p className="text-center font-serif text-lg italic text-slate-500 print:text-base">This is to proudly certify that</p>
 
             <div className="mx-auto mt-5 max-w-[150mm] border-b border-slate-300 pb-3 text-center print:mt-4 print:max-w-[140mm] print:pb-2">
-              <h2 className="text-3xl font-bold uppercase tracking-[0.08em] text-[#1B2340] sm:text-4xl print:text-[28px]">{data.companyName}</h2>
+              <h2 className="text-3xl font-bold uppercase tracking-[0.08em] text-[#1B2340] sm:text-4xl print:text-[28px]">{data.representativeName}</h2>
             </div>
 
             <div className="mx-auto mt-7 max-w-[160mm] text-center print:mt-5 print:max-w-[150mm]">
               <p className="text-lg leading-8 text-slate-700 print:text-base print:leading-7">
-                Represented by <span className="font-bold text-[#1B2340]">{data.representativeName}</span>, has been officially
+               <span className="font-bold text-[#1B2340]">{data.representativeName}</span>, has been officially
                 approved and registered as an
               </p>
               <p className="mt-3 text-xl font-bold text-[#C6A96A] print:mt-2 print:text-[17px]">Authorized GGBA Global Educational Agent</p>

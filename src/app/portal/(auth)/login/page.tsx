@@ -17,6 +17,13 @@ function getAuthErrorMessage(error: string) {
     return 'Unable to sign in right now. Please try again.';
 }
 
+function getSafePortalRedirect(target: string | null) {
+    if (!target || !target.startsWith('/portal/')) {
+        return '/portal';
+    }
+    return target;
+}
+
 function LoginPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -27,19 +34,21 @@ function LoginPageContent() {
     const [isOtpLoading, setIsOtpLoading] = useState(false);
     const lastShownError = useRef<string | null>(null);
     const authError = searchParams.get('error');
+    const redirectTarget = getSafePortalRedirect(searchParams.get('from'));
 
     useEffect(() => {
         if (status !== 'authenticated') return;
         const userRole = String((session?.user as { role?: string } | undefined)?.role || '').toLowerCase();
-        const nextRoute =
+        const defaultRoute =
             userRole === 'admin'
                 ? '/portal/admin/dashboard'
                 : userRole === 'agent'
                     ? '/portal/agent/dashboard'
                     : '/portal/applicant/dashboard';
+        const nextRoute = redirectTarget === '/portal' ? defaultRoute : redirectTarget;
         router.replace(nextRoute);
         router.refresh();
-    }, [router, session, status]);
+    }, [redirectTarget, router, session, status]);
 
     useEffect(() => {
         if (!authError || lastShownError.current === authError) return;
@@ -89,7 +98,7 @@ function LoginPageContent() {
 
         const result = await signIn('credentials', {
             redirect: false,
-            callbackUrl: '/portal',
+            callbackUrl: redirectTarget,
             email: userId.trim(),
             password,
         });
