@@ -1,10 +1,29 @@
 "use client";
 
+import { FormEvent, useState } from "react";
 import { Mail, MapPin, Clock, ArrowRight, Globe } from "lucide-react";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
+
+type ContactLine = {
+    label: string | null;
+    value: string;
+    href?: string;
+};
+
+type ContactItem =
+    | {
+          icon: LucideIcon;
+          title: string;
+          lines: ContactLine[];
+      }
+    | {
+          icon: "whatsapp";
+          title: string;
+          lines: ContactLine[];
+      };
 
 // Official WhatsApp SVG icon
 function WhatsAppIcon({ size = 18 }) {
@@ -33,7 +52,17 @@ function WhatsAppIcon({ size = 18 }) {
 }
 
 export default function Contact() {
-    const contactDetails = [
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState("");
+    const [submitSuccess, setSubmitSuccess] = useState("");
+
+    const contactDetails: ContactItem[] = [
         {
             icon: MapPin,
             title: "Office Locations",
@@ -69,6 +98,46 @@ export default function Contact() {
             ],
         },
     ];
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        setSubmitError("");
+        setSubmitSuccess("");
+        setIsSubmitting(true);
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    message: formData.message,
+                }),
+            });
+
+            const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+
+            if (!response.ok) {
+                throw new Error(payload?.error || "Unable to send your message right now.");
+            }
+
+            setSubmitSuccess("Your message has been sent. Our team will contact you shortly.");
+            setFormData({
+                name: "",
+                email: "",
+                phone: "",
+                message: "",
+            });
+        } catch (error) {
+            setSubmitError(error instanceof Error ? error.message : "Unable to send your message right now.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
     return (
         <div
@@ -143,12 +212,14 @@ export default function Contact() {
                                     How can we help you?
                                 </h2>
 
-                                <form className="space-y-5">
+                                <form className="space-y-5" onSubmit={handleSubmit}>
                                     {/* Name */}
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">Name</label>
                                         <input
                                             type="text"
+                                            value={formData.name}
+                                            onChange={(event) => setFormData((prev) => ({ ...prev, name: event.target.value }))}
                                             placeholder="Your full name"
                                             className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 transition-all focus:border-amber-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/20"
                                         />
@@ -163,6 +234,8 @@ export default function Contact() {
                                             <input
                                                 type="email"
                                                 required
+                                                value={formData.email}
+                                                onChange={(event) => setFormData((prev) => ({ ...prev, email: event.target.value }))}
                                                 placeholder="you@example.com"
                                                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 transition-all focus:border-amber-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/20"
                                             />
@@ -174,6 +247,8 @@ export default function Contact() {
                                             <input
                                                 type="tel"
                                                 required
+                                                value={formData.phone}
+                                                onChange={(event) => setFormData((prev) => ({ ...prev, phone: event.target.value }))}
                                                 placeholder="+1 (000) 000-0000"
                                                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 transition-all focus:border-amber-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/20"
                                             />
@@ -197,16 +272,31 @@ export default function Contact() {
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">Comment</label>
                                         <textarea
                                             rows={5}
+                                            value={formData.message}
+                                            onChange={(event) => setFormData((prev) => ({ ...prev, message: event.target.value }))}
                                             placeholder="Tell us how we can help…"
                                             className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 transition-all focus:border-amber-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/20 resize-none"
                                         />
                                     </div>
 
+                                    {submitError ? (
+                                        <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                                            {submitError}
+                                        </p>
+                                    ) : null}
+
+                                    {submitSuccess ? (
+                                        <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                                            {submitSuccess}
+                                        </p>
+                                    ) : null}
+
                                     <button
                                         type="submit"
+                                        disabled={isSubmitting}
                                         className="group w-full flex items-center justify-center gap-2 rounded-xl bg-slate-900 py-4 text-sm font-semibold text-white transition-all hover:bg-amber-500 hover:shadow-[0_4px_20px_rgba(245,158,11,0.3)]"
                                     >
-                                        Send Message
+                                        {isSubmitting ? "Sending..." : "Send Message"}
                                         <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
                                     </button>
                                 </form>
@@ -217,7 +307,7 @@ export default function Contact() {
                         <div className="lg:col-span-2 space-y-5">
                             {contactDetails.map((item, index) => {
                                 const isWhatsApp = item.icon === "whatsapp";
-                                const Icon = isWhatsApp ? null : item.icon;
+                                const Icon = !isWhatsApp ? item.icon : null;
 
                                 return (
                                     <motion.div
@@ -236,7 +326,7 @@ export default function Contact() {
                                                     : "border-amber-200 bg-amber-50 text-amber-500 group-hover:bg-amber-100"
                                             }`}
                                         >
-                                            {isWhatsApp ? <WhatsAppIcon size={18} /> : <Icon size={18} />}
+                                            {isWhatsApp ? <WhatsAppIcon size={18} /> : Icon ? <Icon size={18} /> : null}
                                         </div>
 
                                         {/* Text */}
