@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, ArrowRight, GraduationCap, Stethoscope, TrendingUp } from "lucide-react";
+import { CheckCircle2, ArrowRight, GraduationCap, Stethoscope, TrendingUp, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import ActionCards from "@/components/sections/ActionCards";
