@@ -18,12 +18,26 @@ type AdminApplicationItem = {
     purpose?: string | null;
     status: string;
     agentId?: string | null;
+    formData?: Record<string, unknown> | null;
     applicant?: {
         firstName?: string | null;
         lastName?: string | null;
         email?: string | null;
     } | null;
 };
+
+function asRecord(value: unknown): Record<string, unknown> {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+    return value as Record<string, unknown>;
+}
+
+function firstFilled(formData: Record<string, unknown>, keys: string[]): string {
+    for (const key of keys) {
+        const value = formData[key];
+        if (typeof value === 'string' && value.trim()) return value.trim();
+    }
+    return '';
+}
 
 export default function AdminApplicationsPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -75,10 +89,13 @@ export default function AdminApplicationsPage() {
     const filtered = useMemo(() => {
         const s = searchTerm.toLowerCase();
         return items.filter((app) => {
-            const name = `${app?.applicant?.firstName || ''} ${app?.applicant?.lastName || ''}`.toLowerCase();
+            const formData = asRecord(app.formData);
+            const formName = `${firstFilled(formData, ['firstName'])} ${firstFilled(formData, ['lastName'])}`.trim();
+            const fallbackName = `${app?.applicant?.firstName || ''} ${app?.applicant?.lastName || ''}`.trim();
+            const name = (formName || fallbackName).toLowerCase();
             const id = (app?.id || '').toLowerCase();
             const agentId = (app?.agentId || '').toLowerCase();
-            const email = (app?.applicant?.email || '').toLowerCase();
+            const email = (firstFilled(formData, ['email']) || app?.applicant?.email || '').toLowerCase();
             const status = String(app?.status || '').toLowerCase();
             const purpose = String(app?.purpose || '').toLowerCase();
             const matchesSearch = name.includes(s) || id.includes(s) || agentId.includes(s) || email.includes(s);
@@ -168,12 +185,18 @@ export default function AdminApplicationsPage() {
 
                 <div className="flex-1">
                     <Table columns={['App ID', 'Applicant Info', 'Visa Details', 'Agent Ref', 'Status', 'Action']} className="border-0 shadow-none rounded-none w-full min-w-[950px]">
-                        {filtered.map((app) => (
-                            <TableRow key={app.id}>
+                        {filtered.map((app) => {
+                            const formData = asRecord(app.formData);
+                            const formName = `${firstFilled(formData, ['firstName'])} ${firstFilled(formData, ['lastName'])}`.trim();
+                            const applicantName = formName || `${app?.applicant?.firstName || ''} ${app?.applicant?.lastName || ''}`.trim() || 'Applicant';
+                            const applicantEmail = firstFilled(formData, ['email']) || app?.applicant?.email || '-';
+
+                            return (
+                                <TableRow key={app.id}>
                                 <TableCell className="font-bold text-gray-900 text-xs tracking-wider">{formatApplicationRef(app.id)}</TableCell>
                                 <TableCell>
-                                    <div className="font-bold text-gray-900">{`${app?.applicant?.firstName || ''} ${app?.applicant?.lastName || ''}`.trim() || 'Applicant'}</div>
-                                    <div className="text-xs text-gray-500 mt-0.5 font-medium">{app?.applicant?.email}</div>
+                                    <div className="font-bold text-gray-900">{applicantName}</div>
+                                    <div className="text-xs text-gray-500 mt-0.5 font-medium">{applicantEmail}</div>
                                     <div className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold hidden sm:block">Applied: {new Date(app.createdAt).toLocaleDateString()}</div>
                                 </TableCell>
                                 <TableCell>
@@ -210,8 +233,9 @@ export default function AdminApplicationsPage() {
                                         </Button>
                                     </div>
                                 </TableCell>
-                            </TableRow>
-                        ))}
+                                </TableRow>
+                            );
+                        })}
                         {filtered.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={6} className="text-center py-20 px-4 bg-[#F6F8FB]/50">
