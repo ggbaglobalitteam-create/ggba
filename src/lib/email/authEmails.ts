@@ -156,3 +156,74 @@ export async function sendAppointmentBookedEmail(params: {
     `,
   });
 }
+
+export async function sendDocumentsCompletedEmail(params: {
+  to: string;
+  applicationId: string;
+  applicantName?: string | null;
+  applicantEmail?: string | null;
+  applicantPhone?: string | null;
+  destinationCountry?: string | null;
+  purpose?: string | null;
+  completedAtIso: string;
+  requiredDocuments: string[];
+  adminReviewUrl?: string | null;
+}) {
+  const {
+    to,
+    applicationId,
+    applicantName,
+    applicantEmail,
+    applicantPhone,
+    destinationCountry,
+    purpose,
+    completedAtIso,
+    requiredDocuments,
+    adminReviewUrl,
+  } = params;
+  const name = appName();
+  const subject = `${name} documents complete (${formatApplicationRef(applicationId)})`;
+  const completedAt = new Date(completedAtIso);
+  const completedAtText = Number.isNaN(completedAt.getTime()) ? completedAtIso : completedAt.toISOString();
+  const docsText = requiredDocuments.length ? requiredDocuments.join(", ") : "N/A";
+  const applicant = applicantName?.trim() || "Applicant";
+  const email = applicantEmail?.trim() || "N/A";
+  const phone = applicantPhone?.trim() || "N/A";
+  const country = destinationCountry?.trim() || "N/A";
+  const visaPurpose = purpose?.trim() || "N/A";
+  const reviewUrl = adminReviewUrl?.trim() || "";
+
+  await sendEmail({
+    to,
+    subject,
+    text: [
+      "A visa application has completed required document submission.",
+      "",
+      `Application ID: ${formatApplicationRef(applicationId)} (${applicationId})`,
+      `Applicant: ${applicant}`,
+      `Email: ${email}`,
+      `Phone: ${phone}`,
+      `Destination: ${country}`,
+      `Purpose: ${visaPurpose}`,
+      `Documents completed at: ${completedAtText}`,
+      `Required documents: ${docsText}`,
+      reviewUrl ? `Review in admin: ${reviewUrl}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n"),
+    html: `
+      <div style="font-family:Arial,sans-serif;line-height:1.5;color:#111827">
+        <p>A visa application has completed required document submission.</p>
+        <p><strong>Application ID:</strong> ${escapeHtml(formatApplicationRef(applicationId))} (${escapeHtml(applicationId)})</p>
+        <p><strong>Applicant:</strong> ${escapeHtml(applicant)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+        <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
+        <p><strong>Destination:</strong> ${escapeHtml(country)}</p>
+        <p><strong>Purpose:</strong> ${escapeHtml(visaPurpose)}</p>
+        <p><strong>Documents completed at:</strong> ${escapeHtml(completedAtText)}</p>
+        <p><strong>Required documents:</strong> ${escapeHtml(docsText)}</p>
+        ${reviewUrl ? `<p><a href="${escapeHtml(reviewUrl)}" target="_blank" rel="noreferrer">Open application in admin</a></p>` : ""}
+      </div>
+    `,
+  });
+}
