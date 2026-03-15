@@ -9,12 +9,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.ggbaglobal.com'),
-  title: "Ggba Global | Premier Enterprise Consulting & Digital Transformation",
-  description: "Ggba Global provides world-class consulting in AI, Cloud, Cybersecurity, and Data Analytics, driving digital transformation for enterprise clients worldwide.",
+  title: "GGBA Global | Investments; Business; Education.",
+  description: "Your trusted partner for international services across multiple regions",
   keywords: "digital transformation, AI automation, enterprise consulting, cloud architecture, cybersecurity, data analytics, corporate strategy, technology advisory, global consultancy, IT modernization",
   openGraph: {
-    title: "Ggba Global | Enterprise Tech Consulting",
-    description: "Driving digital transformation for enterprise clients worldwide.",
+    title: "GGBA Global | Investments; Business; Education.",
+    description: "Your trusted partner for international services across multiple regions",
     url: "https://Ggbaglobal.example.com",
     siteName: "Ggba Global",
     images: [{ url: "/og-image.jpg" }],
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ggba Global | Tech Consulting",
-    description: "Driving digital transformation for enterprise clients worldwide.",
+    title: "GGBA Global | Investments; Business; Education.",
+    description: "Your trusted partner for international services across multiple regions",
     images: ["/og-image.jpg"],
   },
 };
