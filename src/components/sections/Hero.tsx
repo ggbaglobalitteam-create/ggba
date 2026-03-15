@@ -57,10 +57,7 @@ export default function Hero() {
                         className="flex flex-col gap-2 mb-10"
                     >
                         <p className="text-amber-400 text-xl font-medium">
-                            Partnering Governments & Universities, Globally.
-                        </p>
-                        <p className="text-amber-400 text-xl font-medium">
-                            Investments | Business | Education.
+                            GGBA Global | Investments; Business; Education.
                         </p>
                         <p className="text-white/70 text-lg mt-1">
                             • Tbilisi, Georgia &nbsp;•&nbsp; Minsk, Belarus.

@@ -70,7 +70,7 @@ export default function Footer() {
                         </div>
 
                         <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-xs">
-                          Your trusted partner for international services across multiple regions.
+                          Your trusted partner for international services across multiple regions
                         </p>
 
                         {/* Contact snippets */}
