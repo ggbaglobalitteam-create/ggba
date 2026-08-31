@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X, LogOut, Bell } from 'lucide-react';
 import { useRole } from '@/context/RoleContext';
 import { useSession } from 'next-auth/react';
+import RegistrationNotice from '@/components/layout/RegistrationNotice';
 
 export interface NavItem {
     title: string;
@@ -272,6 +273,11 @@ export function PortalDashboardLayout({ children, navigation, roleTitle }: Porta
                         {children}
                     </div>
                 </main>
+
+                {/* Regulatory disclosure */}
+                <footer className="shrink-0 border-t border-[#E5EAF2] bg-white px-4 py-4 lg:px-8">
+                    <RegistrationNotice className="text-[#6B7280]" />
+                </footer>
             </div>
         </div>
     );

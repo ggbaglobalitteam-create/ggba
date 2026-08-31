@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import RegistrationNotice from '@/components/layout/RegistrationNotice';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -9,10 +10,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             {/* Main Content Area */}
             <div className="flex w-full h-full relative z-10">
                 {/* Left side - Auth Form */}
-                <div className="w-full lg:w-1/2 h-full flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-4 relative">
+                <div className="w-full lg:w-1/2 h-full flex flex-col justify-center px-6 sm:px-12 lg:px-20 pt-4 pb-20 relative">
                     {/* Content */}
                     <div className="max-w-xl w-full mx-auto md:ml-0 lg:ml-8 xl:ml-20 relative z-10 overflow-y-auto max-h-screen py-8">
                         {children}
+                    </div>
+
+                    {/* Regulatory disclosure */}
+                    <div className="absolute inset-x-0 bottom-0 z-10 px-6 sm:px-12 lg:px-20 pb-5">
+                        <RegistrationNotice className="text-[#6B7280]" />
                     </div>
                 </div>
 

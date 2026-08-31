@@ -5,6 +5,7 @@ import { PublicCertificateActions } from "@/components/portal/PublicCertificateA
 import { AgentCertificateDocument } from "@/components/portal/AgentCertificateDocument";
 import { buildAgentCertificateData } from "@/lib/agentCertificate";
 import { prisma } from "@/lib/prisma";
+import RegistrationNotice from "@/components/layout/RegistrationNotice";
 
 function getBaseUrl() {
   const headerStore = headers();
@@ -45,6 +46,11 @@ export default async function PublicAgentCertificatePage({
       <PublicCertificateActions autoPrint={searchParams?.download === "1"} />
       <div className="certificate-print-stage print:m-0 print:p-0">
         <AgentCertificateDocument data={data} qrTargetUrl={downloadUrl} />
+      </div>
+
+      {/* Regulatory disclosure — screen only, so the A4 print output is untouched */}
+      <div className="mt-8 print:hidden">
+        <RegistrationNotice className="text-[#6B7280]" />
       </div>
 
       <style
