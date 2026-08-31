@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Linkedin, Facebook, Instagram, ArrowUpRight } from "lucide-react";
 
 import { APPLICATION_STATUS_ROUTE, APPOINTMENT_BOOKING_ROUTE, PORTAL_LOGIN_ROUTE } from "@/lib/portalRoutes";
+import RegistrationNotice from "@/components/layout/RegistrationNotice";
 
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 
@@ -152,10 +153,13 @@ export default function Footer() {
                     {/* Amber accent line */}
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
 
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-                        <p>&copy; {new Date().getFullYear()} LLC GGBA Global. All rights reserved.</p>
+                    <div className="flex flex-col md:flex-row md:items-start items-center justify-between gap-4 text-sm text-slate-500">
+                        <div className="max-w-xl text-center md:text-left">
+                            <p>&copy; {new Date().getFullYear()} LLC GGBA Global. All rights reserved.</p>
+                            <RegistrationNotice className="mt-2 text-slate-500 md:text-left md:mx-0" />
+                        </div>
 
-                        <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-6 shrink-0">
                             {legal.map(({ label, href }) => (
                                 <Link key={label} href={href}
                                     className="hover:text-amber-400 transition-colors flex items-center gap-1 group"
